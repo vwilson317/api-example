@@ -9,11 +9,14 @@
     <PackageReference Include="Swashbuckle.AspNetCore.Swagger" Version="5.5.1" />
     <PackageReference Include="Swashbuckle.AspNetCore.SwaggerUi" Version="5.5.1" />
     <PackageReference Include="Swashbuckle.AspNetCore.SwaggerGen" Version="5.5.1" />
+    <PackageReference Include="AutoMapper" Version="10.0.0" />
+    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="8.0.0" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="BusinessLogic\" />
     <Folder Include="DataAccess\" />
     <Folder Include="Dtos\" />
     <Folder Include="Controllers\" />
+    <Folder Include="AutoMapper\" />
   </ItemGroup>
 </Project>

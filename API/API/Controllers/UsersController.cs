@@ -39,7 +39,7 @@ namespace API.Controllers
             var data = await _userBusinessLogic.GetAsync(emailAddress);
             if (data.Any())
             {
-                return Ok();
+                return Ok(data);
             }
             else
             {
