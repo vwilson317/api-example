@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using API.BusinessLogic;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -28,6 +29,8 @@ namespace API
             services.AddControllers();
 
             services.AddSwaggerGen();
+
+            services.AddSingleton<IUserBusinessLogic, UserBusinessLogic>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

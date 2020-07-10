@@ -10,4 +10,10 @@
     <PackageReference Include="Swashbuckle.AspNetCore.SwaggerUi" Version="5.5.1" />
     <PackageReference Include="Swashbuckle.AspNetCore.SwaggerGen" Version="5.5.1" />
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="BusinessLogic\" />
+    <Folder Include="DataAccess\" />
+    <Folder Include="Dtos\" />
+    <Folder Include="Controllers\" />
+  </ItemGroup>
 </Project>

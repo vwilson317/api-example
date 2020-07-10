@@ -1,39 +1,62 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using API.BusinessLogic;
+using API.Dtos;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
+
+// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace API.Controllers
 {
-    [ApiController]
-    [Route("[controller]")]
-    public class WeatherForecastController : ControllerBase
+    [Route("api/[controller]")]
+    public class UsersController : ControllerBase
     {
-        private static readonly string[] Summaries = new[]
-        {
-            "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-        };
+        private IUserBusinessLogic _userBusinessLogic;
 
-        private readonly ILogger<WeatherForecastController> _logger;
-
-        public WeatherForecastController(ILogger<WeatherForecastController> logger)
+        public UsersController(IUserBusinessLogic userBusinessLogic)
         {
-            _logger = logger;
+            _userBusinessLogic = userBusinessLogic;
         }
 
         [HttpGet]
-        public IEnumerable<WeatherForecast> Get()
+        public async Task<IActionResult> Get()
         {
-            var rng = new Random();
-            return Enumerable.Range(1, 5).Select(index => new WeatherForecast
+            var data = await _userBusinessLogic.GetAsync();
+            if (data.Any())
             {
-                Date = DateTime.Now.AddDays(index),
-                TemperatureC = rng.Next(-20, 55),
-                Summary = Summaries[rng.Next(Summaries.Length)]
-            })
-            .ToArray();
+                return Ok();
+            }
+            else
+            {
+                return NoContent();
+            }
+        }
+
+        [HttpGet("{emailAddress}")]
+        public async Task<IActionResult> Get(string emailAddress)
+        {
+            var data = await _userBusinessLogic.GetAsync(emailAddress);
+            if (data.Any())
+            {
+                return Ok();
+            }
+            else
+            {
+                return NoContent();
+            }
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Post([FromBody]UserDto user)
+        {
+            var data = await _userBusinessLogic.CreateAsync(user);
+            if(data != null)
+            {
+                return Created(new Uri($"http://localhost:3000/api/users/{data.EmailAddress}"), data);
+            }
+
+            return new EmptyResult();
         }
     }
 }
