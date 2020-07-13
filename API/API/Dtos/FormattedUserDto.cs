@@ -2,7 +2,7 @@
 
 namespace API.Dtos
 {
-    public class FormattedUserDto
+    public class FormattedUserDto : IEmailable
     {
         public string FullName { get; set; }
         public string PhoneNumber { get; set; }
