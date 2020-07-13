@@ -8,6 +8,7 @@ namespace API.DataAccess
 {
     public class UserDataAccess : IUserDataAccess
     {
+        //todo: use environment variables. leaving these here so code can be run without additional steps
         /// The Azure Cosmos DB endpoint for running this GetStarted sample.
         private string EndpointUrl = "https://test-api-example.documents.azure.com:443/";//Environment.GetEnvironmentVariable("EndpointUrl");
 
@@ -18,7 +19,7 @@ namespace API.DataAccess
         private CosmosClient cosmosClient;
 
         // The database we will create
-        private Database database;
+        private Database _database;
 
         // The container we will create.
         private Container _container;
@@ -35,23 +36,23 @@ namespace API.DataAccess
                     ApplicationRegion = Regions.WestUS,
                 });
 
-            this.database = cosmosClient.CreateDatabaseIfNotExistsAsync(databaseId).Result;
+            _database = cosmosClient.CreateDatabaseIfNotExistsAsync(databaseId).Result;
 
-            _container = database.CreateContainerIfNotExistsAsync(containerId, "/LastName").Result;
+            _container = _database.CreateContainerIfNotExistsAsync(containerId, "/LastName").Result;
         }
 
 
         public async Task<User> CreateAsync(User user)
         {
                 user.Id = Guid.NewGuid().ToString();
-                ItemResponse<User> response = await this._container.CreateItemAsync<User>(user, new PartitionKey(user.LastName));
+                ItemResponse<User> response = await _container.CreateItemAsync(user, new PartitionKey(user.LastName));
                 Console.WriteLine("Created item in database with id: {0} Operation consumed {1} RUs.\n", response.Resource.Id, response.RequestCharge);
             return user;
         }
 
         public async Task DeleteAsync(User user)
         { 
-            var response = await _container.DeleteItemAsync<User>(user.Id, new PartitionKey(user.LastName));
+            await _container.DeleteItemAsync<User>(user.Id, new PartitionKey(user.LastName));
         }
 
         public async Task<IEnumerable<User>> GetAsync(string emailAddress)
