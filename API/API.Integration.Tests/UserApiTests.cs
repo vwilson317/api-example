@@ -78,6 +78,27 @@ namespace API.Integration.Tests
             response.StatusCode.Should().Be(HttpStatusCode.Created);
         }
 
+        [TestCase("")]
+        [TestCase("fdasfasfdasfd")]
+        [TestCase(".@")]
+        public async Task Post_Invalid_Email(string invalidEmail)
+        {
+            //setup
+            var guidStr = Guid.NewGuid();
+            var obj = new UserDto
+            {
+                FristName = "x",
+                MiddleName = "x",
+                LastName = "x",
+                EmailAddress = invalidEmail,
+                PhoneNumber = "112-233-1923"
+            };
+
+            var response = await CreateObj(obj);
+
+            response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
+        }
+
         [Test]
         public async Task Delete()
         {
