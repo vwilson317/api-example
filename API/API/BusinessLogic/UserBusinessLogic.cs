@@ -25,11 +25,6 @@ namespace API.BusinessLogic
             return _mapper.Map<FormattedUserDto>(newEntity);
         }
 
-        public async Task<IEnumerable<FormattedUserDto>> GetAsync()
-        {
-            throw new System.NotImplementedException();
-        }
-
         public async Task<IEnumerable<FormattedUserDto>> GetAsync(string emailAddress)
         {
             var entities = await _userRepo.GetAsync(emailAddress);

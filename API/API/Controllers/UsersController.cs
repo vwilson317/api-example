@@ -2,7 +2,10 @@
 using System.Linq;
 using System.Threading.Tasks;
 using API.BusinessLogic;
+using API.Commands;
 using API.Dtos;
+using API.Query;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -12,31 +15,19 @@ namespace API.Controllers
     [Route("api/[controller]")]
     public class UsersController : ControllerBase
     {
-        private IUserBusinessLogic _userBusinessLogic;
+        private IMediator _mediator;
 
-        public UsersController(IUserBusinessLogic userBusinessLogic)
+        public UsersController(IMediator mediator)
         {
-            _userBusinessLogic = userBusinessLogic;
+            _mediator = mediator;
         }
 
-        [HttpGet]
-        public async Task<IActionResult> Get()
-        {
-            var data = await _userBusinessLogic.GetAsync();
-            if (data.Any())
-            {
-                return Ok();
-            }
-            else
-            {
-                return NoContent();
-            }
-        }
-
+        //using email address as resource primary key for querying data
         [HttpGet("{emailAddress}")]
         public async Task<IActionResult> Get(string emailAddress)
         {
-            var data = await _userBusinessLogic.GetAsync(emailAddress);
+            var query = new GetUsersByEmailQuery(emailAddress);
+            var data = await _mediator.Send(query);
             if (data.Any())
             {
                 return Ok(data);
@@ -50,13 +41,14 @@ namespace API.Controllers
         [HttpPost]
         public async Task<IActionResult> Post([FromBody]UserDto user)
         {
-            var data = await _userBusinessLogic.CreateAsync(user);
-            if(data != null)
+            var command = new CreateUserCommand(user);
+            var data = await _mediator.Send(command);
+            if (data != null)
             {
-                return Created(new Uri($"http://localhost:3000/api/users/{data.EmailAddress}"), data);
+                return Created(new Uri($"http://{HttpContext.Request.Host.Value}/api/users/{data.EmailAddress}"), data);
             }
 
-            return new EmptyResult();
+            return BadRequest();
         }
     }
 }
