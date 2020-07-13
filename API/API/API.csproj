@@ -2,6 +2,8 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
+    <DockerComposeProjectPath>../docker-compose.dcproj</DockerComposeProjectPath>
+    <UserSecretsId>bff8b2c9-273c-44e5-a8f1-bc2c3a418203</UserSecretsId>
   </PropertyGroup>
 
 
@@ -19,5 +21,8 @@
     <Folder Include="Dtos\" />
     <Folder Include="Controllers\" />
     <Folder Include="AutoMapper\" />
+    <Folder Include="Query\" />
+    <Folder Include="Commands\" />
+    <Folder Include="Handlers\" />
   </ItemGroup>
 </Project>

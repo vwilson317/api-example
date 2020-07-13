@@ -2,6 +2,7 @@ using API.AutoMapper;
 using API.BusinessLogic;
 using API.DataAccess;
 using AutoMapper;
+using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -30,6 +31,8 @@ namespace API
             services.AddSingleton<IUserDataAccess, UserDataAccess>();
 
             services.AddAutoMapper(typeof(AppProfile));
+            services.AddMediatR(typeof(Startup));
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
