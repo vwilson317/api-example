@@ -7,5 +7,6 @@ namespace API.DataAccess
     {
         Task<IEnumerable<User>> GetAsync(string emailAddress);
         Task<User> CreateAsync(User user);
+        Task DeleteAsync(User user);
     }
 }

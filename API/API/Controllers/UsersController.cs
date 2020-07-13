@@ -50,5 +50,14 @@ namespace API.Controllers
 
             return BadRequest();
         }
+
+        [HttpDelete("{emailAddress}")]
+        public async Task<IActionResult> Delete(string emailAddress)
+        {
+            var command = new DeleteUserCommand(emailAddress);
+            await _mediator.Send(command);
+
+            return Accepted();
+        }
     }
 }

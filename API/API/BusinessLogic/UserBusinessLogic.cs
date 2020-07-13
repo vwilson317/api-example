@@ -25,6 +25,13 @@ namespace API.BusinessLogic
             return _mapper.Map<FormattedUserDto>(newEntity);
         }
 
+        public async Task DeleteAsync(string emailAddress)
+        {
+            var users = await _userRepo.GetAsync(emailAddress);
+            //since i'm not inforcing unqiue emails
+            users.ToList().ForEach(async x => await _userRepo.DeleteAsync(x));
+        }
+
         public async Task<IEnumerable<FormattedUserDto>> GetAsync(string emailAddress)
         {
             var entities = await _userRepo.GetAsync(emailAddress);

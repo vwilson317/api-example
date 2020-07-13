@@ -12,7 +12,8 @@ namespace API.AutoMapper
             CreateMap<User, UserDto>().ReverseMap();
             CreateMap<User, FormattedUserDto>()
                 .ForMember(src => src.FullName,
-                opt => opt.MapFrom(o => $"{o.FristName} {o.MiddleName} {o.LastName}"));
+                opt => opt.MapFrom(o => $"{o.FristName} {o.MiddleName} {o.LastName}"))
+                .ForMember(x => x.UserId, opt => opt.MapFrom(x => x.Id));
         }
     }
 }

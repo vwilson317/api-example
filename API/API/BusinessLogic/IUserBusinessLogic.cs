@@ -8,5 +8,6 @@ namespace API.BusinessLogic
     {
         Task<IEnumerable<FormattedUserDto>> GetAsync(string emailAddress);
         Task<FormattedUserDto> CreateAsync(UserDto user);
+        Task DeleteAsync(string emailAddress);
     }
 }
