@@ -47,8 +47,10 @@ namespace API.Integration.Tests
         }
 
         [Test]
-        public async Task GetByEmail()
+        public async Task Get_Should_Return_200_And_Users_With_x_gmail_Addresses()
         {
+            //manually insert this email address into db for this to be a valid test
+            //treating this as a static data test
             var email = "x@gmail.com";
             IEnumerable<FormattedUserDto> users = await GetUsers(email, true);
 
@@ -56,7 +58,7 @@ namespace API.Integration.Tests
         }
 
         [Test]
-        public async Task Post()
+        public async Task Post_Should_Return_204_And_Create_User()
         {
             //setup
             var guidStr = Guid.NewGuid();
@@ -76,15 +78,21 @@ namespace API.Integration.Tests
             var response = await CreateObj(obj);
 
             response.StatusCode.Should().Be(HttpStatusCode.Created);
+
+            //verify via api creation of user
+            var usersWithEmail = await GetUsers(obj.EmailAddress);
+
+            //valid all results since users can be added in parrallel 
+            usersWithEmail.Select(x => x.EmailAddress).All(x => x == obj.EmailAddress)
+                .Should().BeTrue();
         }
 
         [TestCase("")]
         [TestCase("fdasfasfdasfd")]
         [TestCase(".@")]
-        public async Task Post_Invalid_Email(string invalidEmail)
+        public async Task Post_With_Invalid_Email_Should_Return_400(string invalidEmail)
         {
             //setup
-            var guidStr = Guid.NewGuid();
             var obj = new UserDto
             {
                 FristName = "x",
@@ -100,7 +108,7 @@ namespace API.Integration.Tests
         }
 
         [Test]
-        public async Task Delete()
+        public async Task Delete_Should_Return_202_And_Delete_User()
         {
             //setup
             var guidStr = Guid.NewGuid();
